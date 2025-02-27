@@ -41,14 +41,21 @@ public class CDPlayerTest {
 	
 	@Test
 	public void playMusic() {
+		System.out.println("Play Music");
+		System.out.println("Initial State: " + interpreter.getCurrentState().getName());
+		System.out.println("Track: " + interpreter.getInteger("track"));
 		interpreter.processEvent("PLAY");
 		assertEquals(1, interpreter.getInteger("track"));
 		assertEquals("PLAYING", interpreter.getCurrentState().getName());
 		
+		System.out.println("Current State: " + interpreter.getCurrentState().getName());
+		System.out.println("Track: " + interpreter.getInteger("track"));
 		interpreter.processEvent("TRACK_END");
 		assertEquals(2, interpreter.getInteger("track"));
 		assertEquals("PLAYING", interpreter.getCurrentState().getName());
 		
+		System.out.println("Current State: " + interpreter.getCurrentState().getName());
+		System.out.println("Track: " + interpreter.getInteger("track"));
 		interpreter.processEvent("STOP");
 		assertEquals(2, interpreter.getInteger("track"));
 		assertEquals("STOP", interpreter.getCurrentState().getName());
