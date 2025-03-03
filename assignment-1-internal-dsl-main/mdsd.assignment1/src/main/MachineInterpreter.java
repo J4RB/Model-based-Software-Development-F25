@@ -26,7 +26,7 @@ public class MachineInterpreter {
 
     public void processEvent(String string) {
         // TODO Auto-generated method stub
-    	List<Transition> transitions  = currentState.getTransitionByEvent(string);
+    	List<Transition> transitions = currentState.getTransitionByEvent(string);
     	for (Transition transition : transitions) {
             if (transition.isConditional()) {
                 int value = variables.getOrDefault(transition.getConditionVariableName(), 0);
