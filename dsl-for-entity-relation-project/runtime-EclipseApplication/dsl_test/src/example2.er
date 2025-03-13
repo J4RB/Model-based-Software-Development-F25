@@ -1,0 +1,50 @@
+system example2
+entity Employee {
+	attribute Ename
+	attribute Essn is key
+	attribute Salary
+	attribute Adress[City, Street, Building]
+}
+
+entity Departement {
+	attribute DepName is key
+	attribute Phone is weak
+	attribute NumberOfEmployees
+}
+
+entity Child is weak{
+	attribute Ch_Name 
+	attribute Sex
+	attribute Age
+}
+
+entity Project {
+	attribute PROName is key
+	attribute  PLocation is key
+	attribute DueTime
+}
+
+entity Part {
+	attribute PNO is key
+	attribute Pname
+}
+
+entity Supplier {
+	attribute SID is key
+	attribute Sname
+	attribute Speciality
+}
+
+relation Employee supervise Employee 1..*
+relation Employee Has Child 1..*
+relation Employee execute Project *..* {
+	attribute hours
+}
+relation Employee Works_at Departement *..1
+relation Employee Manage Departement 1..1 {
+	attribute StartDate
+}
+relation Departement Control Project 1..*
+relation Supplier Supply Project *..*
+relation Supplier Supply Part *..*
+relation Part Supply Project *..*

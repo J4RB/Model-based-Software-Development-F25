@@ -1,0 +1,38 @@
+system example3
+entity Customer {
+    attribute id is key as integer 
+    attribute name as integer(10)
+    attribute address as varchar(255)
+    attribute gender as char(1)
+    attribute date_of_Birth as date
+}
+
+entity Purchase_Order {
+    attribute id is key as integer  
+    attribute customer_id as integer
+    attribute date as integer(10)
+    attribute total as integer(10)
+}
+
+entity Order_Product {
+    attribute orderID is key as integer
+    attribute productID is key as integer
+    attribute qty as integer(10)
+}
+
+entity Product {
+    attribute id is key as integer
+    attribute supplierID as integer
+    attribute name as integer(10) 
+}
+
+entity Supplier {
+    attribute id is key as integer
+    attribute name as varchar(255)
+    attribute contact as varchar(10)
+}
+
+relation Customer Purchase_Order 1..*
+relation Purchase_Order Order_Product *..*
+relation Order_Product Product *..*
+relation Product Supplier 1..*

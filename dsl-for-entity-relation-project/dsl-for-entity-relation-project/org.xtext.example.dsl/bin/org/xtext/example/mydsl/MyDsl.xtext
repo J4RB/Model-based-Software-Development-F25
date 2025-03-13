@@ -1,0 +1,79 @@
+grammar org.xtext.example.mydsl.MyDsl with org.eclipse.xtext.common.Terminals
+
+generate myDsl "http://www.xtext.org/example/mydsl/MyDsl"
+
+SystemRoot:
+    'system' name=ID entities+=Entity* relations+=Relation*
+;
+
+Entity:
+	'entity' name=ID ('is' 'weak')? ( '{' attributes+=Attribute* requires+=Require* '}' )?
+;
+
+Attribute:
+	'attribute' name=ID ('[' (ID (',' ID)*)? ']')? ('is' ('weak' | 'key'))? ('as' ID (('(' | '[') INT (']' | ')'))? )?
+;
+
+Relation:
+	'relation' fromEntity=[Entity] (name=ID)? toEntity=[Entity] cardinality=Cardinality ('is' 'weak')? ('{' attributes+=Attribute* '}')?
+;
+
+Cardinality: 
+	('1..1' | '*..*' | '1..*' | '*..1')
+;
+
+Require:
+	'require' expression=Expression
+;
+
+Expression: Or;
+
+Or returns Expression:
+ And ({Or.left=current} "||" right=And)*
+;
+ 
+And returns Expression:
+  Equality ({And.left=current} "&&" right=Equality)*
+;
+ 
+Equality returns Expression:
+  Comparison (
+    {Equality.left=current} op=("=="|"!=")
+    right=Comparison
+  )*
+;
+ 
+Comparison returns Expression:
+  PlusOrMinus (
+    {Comparison.left=current} op=(">="|"<="|">"|"<")
+    right=PlusOrMinus
+  )*
+;
+
+PlusOrMinus returns Expression:
+  MulOrDiv (
+    ({Plus.left=current} '+' | {Minus.left=current} '-')
+    right=MulOrDiv
+  )*
+;
+
+MulOrDiv returns Expression:
+  Primary (
+    {MulOrDiv.left=current} op=('*'|'/')
+    right=Primary
+  )*
+;
+
+Primary returns Expression:
+  '(' Expression ')' |
+  {Not} "!" expression=Primary |
+  Atomic
+;
+
+Atomic returns Expression: 
+	{IntConstant} value=INT |
+	{StringConstant} value=STRING |
+	{BoolConstant} value=('true'|'false') |
+	{VariableRef} variable=[Attribute]
+;
+
